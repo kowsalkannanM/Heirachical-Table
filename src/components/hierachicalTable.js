@@ -55,7 +55,7 @@ export const HierarchicalTable = ({ initialRows, searchTerm = '' }) => {
         if (!searchTerm.trim()) return all
         const term = searchTerm.trim().toLowerCase()
         return all.filter((r) => r.label.toLowerCase().includes(term))
-    }, [rows, originals, searchTerm])
+    }, [rows, originals, searchTerm, flattenForDisplay])
 
     const getGrandTotal = (rows) => {
         return rows.reduce((sum, r) => sum + r.value, 0)
@@ -115,7 +115,7 @@ export const HierarchicalTable = ({ initialRows, searchTerm = '' }) => {
             setRows((prev) => applyAllocationPercent(prev, rowId, num))
             setInputValues((prev) => ({ ...prev, [rowId]: '' }))
         },
-        [inputValues]
+        [inputValues, applyAllocationPercent]
     )
 
     const applyAllocationValue = (rows, targetId, newValue) => {
@@ -174,7 +174,7 @@ export const HierarchicalTable = ({ initialRows, searchTerm = '' }) => {
             setRows((prev) => applyAllocationValue(prev, rowId, num))
             setInputValues((prev) => ({ ...prev, [rowId]: '' }))
         },
-        [inputValues]
+        [inputValues, applyAllocationValue]
     )
 
     const grandVariance =
