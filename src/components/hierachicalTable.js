@@ -27,7 +27,7 @@ export const HierarchicalTable = ({ initialRows, searchTerm = '' }) => {
         [initialRows]
     )
 
-    const flattenForDisplay = (rows) => {
+    const flattenForDisplay = useCallback((rows, originals) => {
         const result = []
         function rowsloop(r, depth, parentId) {
             for (const row of r) {
@@ -48,7 +48,7 @@ export const HierarchicalTable = ({ initialRows, searchTerm = '' }) => {
         }
         rowsloop(rows, 0)
         return result
-    }
+    }, [])
 
     const flatRows = useMemo(() => {
         const all = flattenForDisplay(rows, originals)
@@ -83,7 +83,7 @@ export const HierarchicalTable = ({ initialRows, searchTerm = '' }) => {
         updateParents(rows)
     }
 
-    const applyAllocationPercent = (rows, targetId, percent) => {
+    const applyAllocationPercent = useCallback((rows, targetId, percent) => {
 
         const data = JSON.parse(JSON.stringify(rows))
         function updateValue(nodes) {
@@ -104,7 +104,7 @@ export const HierarchicalTable = ({ initialRows, searchTerm = '' }) => {
         updateValue(data)
         propagateParentTotals(data)
         return data
-    }
+    }, [])
 
     const handleAllocationPercent = useCallback(
         (rowId) => {
@@ -118,7 +118,7 @@ export const HierarchicalTable = ({ initialRows, searchTerm = '' }) => {
         [inputValues, applyAllocationPercent]
     )
 
-    const applyAllocationValue = (rows, targetId, newValue) => {
+    const applyAllocationValue = useCallback((rows, targetId, newValue) => {
         const data = JSON.parse(JSON.stringify(rows))
         const rounded = Math.round(newValue * 100) / 100
 
@@ -163,7 +163,7 @@ export const HierarchicalTable = ({ initialRows, searchTerm = '' }) => {
         }
         return data
 
-    }
+    }, [])
     
     const handleAllocationValue = useCallback(
         (rowId) => {
